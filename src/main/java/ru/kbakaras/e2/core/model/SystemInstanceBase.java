@@ -8,12 +8,12 @@ import ru.kbakaras.sugar.utils.ExceptionUtils;
 
 import java.util.UUID;
 
-public abstract class SystemAccessor {
+public abstract class SystemInstanceBase {
     public final UUID systemId;
     public final String systemName;
     public final Class<? extends SystemType> systemType;
 
-    public SystemAccessor(UUID systemId, String systemName, Class<? extends SystemType> systemType) {
+    public SystemInstanceBase(UUID systemId, String systemName, Class<? extends SystemType> systemType) {
         this.systemId   = systemId;
         this.systemName = systemName;
         this.systemType = systemType;
