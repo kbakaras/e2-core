@@ -8,12 +8,18 @@ import ru.kbakaras.sugar.utils.ExceptionUtils;
 
 import java.util.UUID;
 
-public abstract class SystemInstanceBase {
+/**
+ * Абстрактный класс, от которого должны наследоваться классы, отвечающие за
+ * подключение систем, участвующий в обмене данными через e2.
+ */
+public abstract class SystemConnection {
+
     public final UUID systemId;
     public final String systemName;
     public final Class<? extends SystemType> systemType;
 
-    public SystemInstanceBase(UUID systemId, String systemName, Class<? extends SystemType> systemType) {
+
+    public SystemConnection(UUID systemId, String systemName, Class<? extends SystemType> systemType) {
         this.systemId   = systemId;
         this.systemName = systemName;
         this.systemType = systemType;
@@ -70,4 +76,5 @@ public abstract class SystemInstanceBase {
     public String toString() {
         return systemName;
     }
+
 }
