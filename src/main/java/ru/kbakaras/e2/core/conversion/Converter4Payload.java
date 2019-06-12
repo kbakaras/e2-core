@@ -24,17 +24,12 @@ public class Converter4Payload {
     public final E2Payload input;
     public final E2Payload output;
 
-    private Conversions conversions;
+    private final Conversions conversions;
     private Stack<ConversionContext> contextStack = new Stack<>();
 
     private ConvertedCache convertedCache = new ConvertedCache();
     private Map<Class<? extends SynthCache>, SynthCache> synthCache = new HashMap<>();
 
-    public Converter4Payload(E2Payload input, E2Payload output, Map<String, Class<? extends Conversion>> conversionMap) {
-        this.input = input;
-        this.output = output;
-        this.conversions = new Conversions(conversionMap);
-    }
     public Converter4Payload(E2Payload input, E2Payload output, Conversions conversions) {
         this.input = input;
         this.output = output;

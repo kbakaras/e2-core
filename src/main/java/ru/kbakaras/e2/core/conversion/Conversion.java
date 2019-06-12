@@ -7,11 +7,24 @@ import ru.kbakaras.sugar.lazy.Lazy;
 import java.util.Map;
 import java.util.function.Function;
 
+/**
+ * Классы конверсий должны наследоваться от данного класса.<br/><br/>
+ *
+ * Связывание класса конверсии с типами систем и названием конвертируемой сущности
+ * задаётся при помощи аннотации {@link PayloadConversionBind}.<br/><br/>
+ *
+ * Экземпляр класса конверсии (конкретной) может содержать состояние. Жизненный цикл
+ * экземпляра ограничен одним выходным сообщением. То есть, можно расчитывать, что
+ * состояние, сохраняемое в экземпляре, будет иметь отношение только к одному
+ * выходному сообщению.
+ */
 public abstract class Conversion {
+
     public final Lazy<ConversionRules4Filters> conversionRules4Filters;
 
     public final String[] destinationEntities;
     public final ConversionKind kind;
+
 
     public Conversion(ConversionKind kind, String...destinationEntities) {
         this.destinationEntities = destinationEntities;
@@ -23,9 +36,11 @@ public abstract class Conversion {
             return rules;
         });
     }
+
     public Conversion(String destinationEntity) {
         this(ConversionKind.Simple, new String[] {destinationEntity});
     }
+
 
     public String getDefaultDestinationEntity() {
         if (kind == ConversionKind.Merge || kind == ConversionKind.Simple) {

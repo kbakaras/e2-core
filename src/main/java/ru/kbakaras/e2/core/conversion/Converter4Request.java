@@ -5,24 +5,26 @@ import ru.kbakaras.e2.message.E2ReferenceRequest;
 import ru.kbakaras.e2.message.E2Request;
 import ru.kbakaras.sugar.lazy.Lazy;
 
-import java.util.Map;
-
+@SuppressWarnings("WeakerAccess")
 public class Converter4Request {
+
     public final E2Request input;
     public final E2Request output;
 
     public final Lazy<Converter4Payload> context;
 
-    private Conversions conversions;
+    private final Conversions conversions;
 
-    public Converter4Request(E2Request input, E2Request output, Map<String, Class<? extends Conversion>> conversionMap) {
+
+    public Converter4Request(E2Request input, E2Request output, Conversions conversions) {
         this.input = input;
         this.output = output;
-        this.conversions = new Conversions(conversionMap);
+        this.conversions = conversions;
 
         context = Lazy.of(() ->
                 new Converter4Payload(input.context().get(), output.createContext(), conversions));
     }
+
 
     public void convertReferenceRequest(E2ReferenceRequest source) {
         for (String destinationEntity: conversions.get(source.entityName()).destinationEntities) {
@@ -39,4 +41,5 @@ public class Converter4Request {
                     conversion.conversionRules4Filters.get().apply(filter, destination, this));
         }
     }
+
 }

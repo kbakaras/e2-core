@@ -10,7 +10,11 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PayloadConversionBind {
+
     Class<? extends SystemType> sourceType();
+
     Class<? extends SystemType> destinationType();
+
     String sourceEntity();
+
 }
