@@ -10,6 +10,8 @@ import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Stack;
+import java.util.UUID;
+import java.util.function.Supplier;
 
 /**
  * Класс является диспетчером для конверсий. Ключевые моменты:
@@ -30,11 +32,28 @@ public class Converter4Payload {
     private ConvertedCache convertedCache = new ConvertedCache();
     private Map<Class<? extends SynthCache>, SynthCache> synthCache = new HashMap<>();
 
+    private Supplier<UUID> uidSupplier = Converter4Payload.randomUidSupplier;
+
+
     public Converter4Payload(E2Payload input, E2Payload output, Conversions conversions) {
         this.input = input;
         this.output = output;
         this.conversions = conversions;
     }
+
+
+    public void setUidSupplier(Supplier<UUID> uidSupplier) {
+
+        if (uidSupplier != null) {
+            this.uidSupplier = uidSupplier;
+        }
+
+    }
+
+    protected String randomUid() {
+        return uidSupplier.get().toString();
+    }
+
 
     public Converted convertElement(E2Element element) {
         if (!convertedCache.isConverting(element)) {
@@ -93,4 +112,8 @@ public class Converter4Payload {
 
         return sc;
     }
+
+
+    static final Supplier<UUID> randomUidSupplier = UUID::randomUUID;
+
 }

@@ -5,7 +5,9 @@ import ru.kbakaras.e2.message.E2Exception4Write;
 import ru.kbakaras.sugar.lazy.Lazy;
 
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Классы конверсий должны наследоваться от данного класса.<br/><br/>
@@ -26,6 +28,9 @@ public abstract class Conversion {
     public final ConversionKind kind;
 
 
+    private Supplier<UUID> uidSupplier = Converter4Payload.randomUidSupplier;
+
+
     public Conversion(ConversionKind kind, String...destinationEntities) {
         this.destinationEntities = destinationEntities;
         this.kind = kind;
@@ -39,6 +44,15 @@ public abstract class Conversion {
 
     public Conversion(String destinationEntity) {
         this(ConversionKind.Simple, new String[] {destinationEntity});
+    }
+
+
+    void setUidSupplier(Supplier<UUID> uidSupplier) {
+        this.uidSupplier = uidSupplier;
+    }
+
+    protected String randomUid() {
+        return uidSupplier.get().toString();
     }
 
 
@@ -63,4 +77,5 @@ public abstract class Conversion {
             return output;
         };
     }
+
 }
