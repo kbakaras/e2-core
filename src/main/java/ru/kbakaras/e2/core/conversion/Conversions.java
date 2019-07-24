@@ -6,14 +6,26 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Supplier;
 
+/**
+ * При создании объект данного класса инициализируется картой, содержащей соответствие
+ * имени исходной сущности и класса конверсии для одного заданного варианата:<br/>
+ * {@code ТипИсходнойСистемы -> ТипРезультирующейСистемы}.<br/><br/>
+ * Задача объекта, по мере необходимости выдавать инстанциированные объекты конверсий
+ * в ответ на запрос по имени исходной сущности.
+ */
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class Conversions extends MapCache<String, Conversion> {
-
-    private Map<String, Class<? extends Conversion>> conversionMap;
 
     public Conversions(Map<String, Class<? extends Conversion>> conversionMap) {
         this(conversionMap, null);
     }
 
+    /**
+     * Специальный вариант конструктора. Используется в тестах, позволяет задать
+     * "поставщика" идентификаторов для использования в синтетических ключах. Это позволяет
+     * получить повторяемые выходные сообщения за счёт <b>псевдо-</b>случайности поставляемых
+     * идентификаторов.
+     */
     public Conversions(Map<String, Class<? extends Conversion>> conversionMap, Supplier<UUID> uidSupplier) {
 
         super(inputName -> {
@@ -37,7 +49,6 @@ public class Conversions extends MapCache<String, Conversion> {
                 return new ConversionCopy(inputName);
             }
         });
-        this.conversionMap = conversionMap;
 
     }
 
