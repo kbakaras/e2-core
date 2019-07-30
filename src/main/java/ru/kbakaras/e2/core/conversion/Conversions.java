@@ -29,7 +29,7 @@ public class Conversions extends MapCache<String, Conversion> {
     public Conversions(Map<String, Class<? extends Conversion>> conversionMap, Supplier<UUID> uidSupplier) {
 
         super(inputName -> {
-            Class<? extends Conversion> clazz = conversionMap.get(inputName);
+            Class<? extends Conversion> clazz = conversionMap != null ? conversionMap.get(inputName) : null;
             if (clazz != null) {
                 try {
 
@@ -44,10 +44,9 @@ public class Conversions extends MapCache<String, Conversion> {
                 } catch (InstantiationException | IllegalAccessException e) {
                     throw new RuntimeException(e);
                 }
-
-            } else {
-                return new ConversionCopy(inputName);
             }
+
+            return new ConversionCopy(inputName);
         });
 
     }
