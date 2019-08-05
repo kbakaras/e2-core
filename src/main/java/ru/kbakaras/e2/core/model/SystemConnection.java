@@ -5,7 +5,6 @@ import ru.kbakaras.e2.message.E2;
 import ru.kbakaras.e2.message.E2Request;
 import ru.kbakaras.e2.message.E2Response;
 import ru.kbakaras.e2.message.E2Update;
-import ru.kbakaras.e2.message.E2XmlProducer;
 import ru.kbakaras.e2.message.Use;
 import ru.kbakaras.sugar.utils.ExceptionUtils;
 
@@ -54,27 +53,25 @@ public abstract class SystemConnection {
 
 
     public void sendUpdate(E2Update update) {
-        sendMessage(update);
+        sendUpdateMessage(update);
     }
 
     public void sendRepeat(E2Update update) {
-
+        sendRepeatMessage(update);
     }
 
     public E2Response sendRequest(E2Request request) {
 
         try {
 
-            //return new E2Response(sendMessage(request));
             return sendRequestMessage(request);
 
         } catch (Exception e) {
 
-            Element error = Use.createRoot(E2.ERROR, E2.NS);
-            error.setText(ExceptionUtils.getMessage(e));
-
-             return new E2Response(request.requestType())
-                    .addSystemError(systemId.toString(), systemName, error);
+            return new E2Response(request.requestType())
+                    .addSystemResponse(systemId.toString(), systemName)
+                    .addSystemError().setText(ExceptionUtils.getMessage(e))
+                    .parent.parent;
 
         }
 
@@ -88,7 +85,7 @@ public abstract class SystemConnection {
 
     protected abstract E2Response sendRequestMessage(E2Request request);
 
-    protected abstract Element sendMessage(E2XmlProducer xmlProducer);
+    //protected abstract Element sendMessage(E2XmlProducer xmlProducer);
 
 
     public Element convertRequest(Element request) {
