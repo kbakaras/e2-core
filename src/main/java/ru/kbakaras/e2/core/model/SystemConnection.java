@@ -1,11 +1,8 @@
 package ru.kbakaras.e2.core.model;
 
-import org.dom4j.Element;
-import ru.kbakaras.e2.message.E2;
 import ru.kbakaras.e2.message.E2Request;
 import ru.kbakaras.e2.message.E2Response;
 import ru.kbakaras.e2.message.E2Update;
-import ru.kbakaras.e2.message.Use;
 import ru.kbakaras.sugar.utils.ExceptionUtils;
 
 import java.util.UUID;
@@ -29,38 +26,15 @@ public abstract class SystemConnection {
     }
 
 
-    /**
-     * Отправляет запрос к системе в понятном для неё формате, возвращает ответ в формате системы.
-     * Этот функционал вынесен в отдельный метод для того, чтобы его можно было запускать в отдельном потоке.
-     * @param request Запрос в формате донора.
-     * @return Ответ от донора в формате донора.
-     */
-    public Element request(Element request) {
-        try {
-            return doRequest(request);
-        } catch (Exception e) {
-            Element error = Use.createRoot(E2.ERROR, E2.NS);
-            error.setText(ExceptionUtils.getMessage(e));
-            return error;
-        }
-    }
-
-    public void update(Element update) {
-        doRequest(update);
-    }
-
-    abstract protected Element doRequest(Element donorRequest);
-
-
-    public void sendUpdate(E2Update update) {
+    public final void sendUpdate(E2Update update) {
         sendUpdateMessage(update);
     }
 
-    public void sendRepeat(E2Update update) {
+    public final void sendRepeat(E2Update update) {
         sendRepeatMessage(update);
     }
 
-    public E2Response sendRequest(E2Request request) {
+    public final E2Response sendRequest(E2Request request) {
 
         try {
 
@@ -77,6 +51,7 @@ public abstract class SystemConnection {
 
     }
 
+
     protected abstract void sendUpdateMessage(E2Update update);
 
     protected void sendRepeatMessage(E2Update update) {
@@ -84,31 +59,6 @@ public abstract class SystemConnection {
     }
 
     protected abstract E2Response sendRequestMessage(E2Request request);
-
-    //protected abstract Element sendMessage(E2XmlProducer xmlProducer);
-
-
-    public Element convertRequest(Element request) {
-        return request;
-    }
-    public E2Response convertResponse(Element response) {
-        return new E2Response(response);
-    }
-
-
-    /**
-     * Метод для упрощения доступа к идентификатору системы
-     */
-    public UUID getId() {
-        return systemId;
-    }
-
-    /**
-     * Метод для упрощения доступа к наименованию системы
-     */
-    public String getName() {
-        return systemName;
-    }
 
 
     @Override
